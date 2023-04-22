@@ -7,7 +7,23 @@
 function solution(a, b) {
   var answer = 0;
 
-  answer = Number((a/b).toFixed(10)) === a/b ? 1 : 2;
+  // answer = Number((a/b).toFixed(10)) === a/b ? 1 : 2;
+
+  const GCD = (x, y) => {
+    return x % y === 0 ? y : GCD(y, x % y);
+  };
+
+  let B = b / GCD(a, b);
+
+  while (B % 2 === 0) {
+    B = B / 2;
+  }
+
+  while (B % 5 === 0) {
+    B = B / 5;
+  }
+  
+  B === 1 ? answer = 1 : answer = 2;
 
   return answer;
 }

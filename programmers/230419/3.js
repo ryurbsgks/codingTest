@@ -9,7 +9,7 @@ function solution(lines) {
 
   let arr = new Array(200).fill(0);
 
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < lines.length; i++) {
 
     let left = lines[i][0];
     let right = lines[i][1];
@@ -21,7 +21,7 @@ function solution(lines) {
 
   arr.map( (el) => {
     if (el > 1) {
-      answer = answer + 1;
+      answer++;
     }
   });
 
