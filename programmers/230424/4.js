@@ -25,4 +25,3 @@ function solution(my_string) {
 }
 
 console.log(solution("3 + 4")) // 7
-console.log(solution("3 + 4 - 3 - 2 + 6")) // 8
