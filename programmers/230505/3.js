@@ -25,4 +25,3 @@ function solution(strArr) {
 }
 
 console.log(solution(["a","bc","d","efg","hi"])) // 2
-console.log(solution(["a","bc","d","efg","hi", "easdf", "dddd", "dddd", "1111"])) // 2
