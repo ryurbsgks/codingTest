@@ -5,21 +5,6 @@
 function solution(babbling) {
   var answer = 0;
 
-  // const regexp1 = /(aya|ye|woo|ma)\1+/;
-  // const regexp2 = /^(aya|ye|woo|ma)+$/;
-  // let arr = [];
-  // let newArr = [];
-  // const test = /^(aya|ye|woo|ma)+$/
-  // const test2 = /(aya|ye|woo|ma)\1+/
-
-  // babbling.map( (el) => {
-  //   if (test.test(el) ) arr.push(el)
-  // });
-  // console.log("----ar----", arr)
-  // arr.map( (el) => {
-  //   if (!test2.test(el)) newArr.push(el);
-  // })
-  // console.log("----newArr----", newArr)
   babbling.map( (el) => {
     if (/^(aya|ye|woo|ma)+$/.test(el)) {
       if (!/(aya|ye|woo|ma)\1+/.test(el)) {
@@ -27,7 +12,6 @@ function solution(babbling) {
       }
     }
   });
-
 
   return answer;
 }
