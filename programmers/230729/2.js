@@ -21,72 +21,57 @@
 function solution(cap, n, deliveries, pickups) {
   var answer = 0;
 
-  let temp = [0, 0];
-  let index = n - 1;
-  let idx = n - 1;
-  let arr = [];
-  let newArr = [];
+  while (deliveries.length !== 0 || pickups.length !== 0) {
 
-  while (index > -1) {
+    let d = deliveries.length - 1;
+    let p = pickups.length - 1;
+    let go = cap;
+    let come = cap;
 
-    let diff = temp[0] + deliveries[index] - cap;
-
-    if (temp[0] === 0 && deliveries[index] > 0) {
-      arr.push(index);
+    while (true) {
+      if (deliveries[d] === 0) {
+        deliveries.pop();
+        d--
+      } else {
+        break;
+      }
     }
 
-    if (diff <= 0) {
-      temp[0] = temp[0] + deliveries[index];
-      deliveries[index] = 0;
+    let a = d;
+
+    while (go !== 0 && a >= 0) {
+      if (deliveries[a] === 0) {
+        a--;
+      } else {
+        deliveries[a]--;
+        go--;
+      }
+    }
+
+    while (true) {
+      if (pickups[p] === 0) {
+        pickups.pop();
+        p--
+      } else {
+        break;
+      }
+    }
+
+    let b = p;
+
+    while (come !== 0 && b >= 0) {
+      if (pickups[b] === 0) {
+        b--;
+      } else {
+        pickups[b]--;
+        come--;
+      }
+    }
+
+    if (d > p) {
+      answer = answer + (d + 1) * 2;
     } else {
-      deliveries[index] = deliveries[index] - (cap - temp[0]);
-      temp[0] = 0;
-
-      continue;
-    }
-
-    index--;
-  }
-
-  while (idx > -1) {
-
-    let diff = temp[1] + pickups[idx] - cap;
-
-    if (temp[1] === 0 && pickups[idx] > 0) {
-      newArr.push(idx);
-    }
-
-    if (diff <= 0) {
-      temp[1] = temp[1] + pickups[idx];
-      pickups[idx] = 0;
-    } else {
-      pickups[idx] = pickups[idx] - (cap - temp[1]);
-      temp[1] = 0;
-
-      continue;
-    }
-
-    idx = idx - 1;
-  }
-
-  if (arr.length > 0 && newArr.length > 0) {
-
-    let length = arr.length >= newArr.length ? newArr.length : arr.length;
-
-    for (let i = 0; i < length; i++) {
-
-      let d = arr.shift();
-      let p = newArr.shift();
-
-      answer = answer + 2 * (p > d ? p + 1 : d + 1);
-    }
-
-    while (arr.length > 0) {
-      answer = answer + 2 * (arr.shift() + 1);
-    }
-
-    while (newArr.length > 0) {
-      answer = answer + 2 * (newArr.shift() + 1);
+      answer = answer + (p + 1) * 2;
     }
 
   }
