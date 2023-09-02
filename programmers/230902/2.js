@@ -5,76 +5,84 @@
 // 직사각형 모양의 공간에 놓인 동전들의 초기 상태를 나타내는 2차원 정수 배열 beginning, 목표 상태를 나타내는 target이 주어졌을 때, 초기 상태에서 목표 상태로 만들기 위해 필요한 동전 뒤집기 횟수의 최솟값을 return 하는 solution 함수를 완성하세요. 단, 목표 상태를 만들지 못하는 경우에는 -1을 return 합니다.
 
 function solution(beginning, target) {
-  var answer = 0;
+  var answer = Infinity;
 
-  let row = beginning.length;
-  let col = beginning[0].length;
-  let beginningList = makeList(beginning, row, col);
-  let targetList = makeList(target, row, col);
-  let testCases = Array.from({ length: 1 << (row + col) }, (_, i) => i);
+  let rows = beginning.length;
+  let cols = beginning[0].length;
+  let arr = [];
 
-  testCases.sort( (a, b) => {
+  for (let i = 0; i < rows; i++) {
+    arr.push([]);
 
-    let countA = (a.toString(2).match(/1/g) || []).length;
-    let countB = (b.toString(2).match(/1/g) || []).length;
-
-    return countA - countB;
-  });
-
-  for (let el of testCases) {
-
-    let flippedList = flip(beginningList, el, row, col);
-    let cnt = (el.toString(2).match(/1/g) || []).length;
-
-    if (JSON.stringify(flippedList) === JSON.stringify(targetList)) {
-      return cnt;
-    }
-
-  }
-
-  return -1;
-}
-
-function makeList(lst, row, col) {
-
-  let result = [];
-
-  for (let i = 0; i < row; i++) {
-
-    let sum = 0;
-
-    for (let j = 0; j < col; j++) {
-      sum += (1 << j) * lst[i][j];
-    }
-
-    result.push(sum);
-
-  }
-
-  return result;
-}
-
-function flip(lst, flipCheck, row, col) {
-
-  let result = [];
-
-  for (let i = 0; i < row; i++) {
-    if (flipCheck & (1 << i)) {
-      result.push((1 << col) - lst[i] - 1);
-    } else {
-      result.push(lst[i]);
-    }
-  }
-
-  for (let i = 0; i < col; i++) {
-    if (flipCheck & (1 << (row + i))) {
-      for (let j = 0; j < row; j++) {
-        result[j] ^= (1 << i);
+    for (let j = 0; j < cols; j++) {
+      if (beginning[i][j]) {
+        arr[i].push(0);
+      } else {
+        arr[i].push(1);
       }
     }
   }
 
-  return result;
+  for (let unit = 0; unit < (1 << rows); unit++) {
+
+    let rowFlipped = [];
+    let flipCnt = 0;
+
+    for (let i = 0; i < rows; i++) {
+
+      let comp = 1 << i;
+
+      if (unit & comp) {
+        rowFlipped.push([...arr[i]]);
+        flipCnt++;
+      } else {
+        rowFlipped.push([...beginning[i]]);
+      }
+
+    }
+
+    for (let j = 0; j < cols; j++) {
+
+      let curCol = [];
+      let targetCol = [];
+
+      for (let i = 0; i < rows; i++) {
+        curCol.push(rowFlipped[i][j]);
+        targetCol.push(target[i][j]);
+      }
+
+      if (!curCol.every( (el, idx) => el === targetCol[idx])) {
+        flipColumn(rowFlipped, j);
+        flipCnt++;
+      }
+
+    }
+
+    if (JSON.stringify(rowFlipped) === JSON.stringify(target)) {
+      answer = Math.min(answer, flipCnt);
+    }
+
+  }
+
+  if (answer === Infinity) {
+    answer = -1;
+  }
+
+  return answer;
+}
+
+function flipColumn(arr, col) {
+
+  let n = arr.length;
+
+  for (let i = 0; i < n; i++) {
+    if (arr[i][col] === 1) {
+      arr[i][col] = 0;
+    } else {
+      arr[i][col] = 1;
+    }
+  }
+
 }
 
 console.log(solution([[0, 1, 0, 0, 0], [1, 0, 1, 0, 1], [0, 1, 1, 1, 0], [1, 0, 1, 1, 0], [0, 1, 0, 1, 0]], [[0, 0, 0, 1, 1], [0, 0, 0, 0, 1], [0, 0, 1, 0, 1], [0, 0, 0, 1, 0], [0, 0, 0, 0, 1]])) // 5
