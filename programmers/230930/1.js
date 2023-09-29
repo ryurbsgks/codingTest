@@ -40,7 +40,7 @@ function solution(relation) {
     return results;
   };
 
-  const checkUniqueness = (arr, comb) => {
+  const checkUnique = (arr, comb) => {
 
     const results = [];
 
@@ -61,7 +61,7 @@ function solution(relation) {
     return results;
   };
 
-  const checkMinimality = (comb) => {
+  const checkMin = (comb) => {
 
     const results = [];
   
@@ -87,8 +87,8 @@ function solution(relation) {
     newArr.push(...getCombination(arr, i + 1));
   }
 
-  newArr = checkUniqueness(relation, newArr);
-  newArr = checkMinimality(newArr);
+  newArr = checkUnique(relation, newArr);
+  newArr = checkMin(newArr);
 
   answer = newArr.length;
 
