@@ -1,0 +1,106 @@
+// 차세대 영농인 한나는 강원도 고랭지에서 유기농 배추를 재배하기로 하였다. 농약을 쓰지 않고 배추를 재배하려면 배추를 해충으로부터 보호하는 것이 중요하기 때문에, 한나는 해충 방지에 효과적인 배추흰지렁이를 구입하기로 결심한다. 이 지렁이는 배추근처에 서식하며 해충을 잡아 먹음으로써 배추를 보호한다. 특히, 어떤 배추에 배추흰지렁이가 한 마리라도 살고 있으면 이 지렁이는 인접한 다른 배추로 이동할 수 있어, 그 배추들 역시 해충으로부터 보호받을 수 있다. 한 배추의 상하좌우 네 방향에 다른 배추가 위치한 경우에 서로 인접해있는 것이다.
+// 한나가 배추를 재배하는 땅은 고르지 못해서 배추를 군데군데 심어 놓았다. 배추들이 모여있는 곳에는 배추흰지렁이가 한 마리만 있으면 되므로 서로 인접해있는 배추들이 몇 군데에 퍼져있는지 조사하면 총 몇 마리의 지렁이가 필요한지 알 수 있다. 예를 들어 배추밭이 아래와 같이 구성되어 있으면 최소 5마리의 배추흰지렁이가 필요하다. 0은 배추가 심어져 있지 않은 땅이고, 1은 배추가 심어져 있는 땅을 나타낸다.
+
+const fs = require("fs");
+const input = fs.readFileSync("/home/ryurbsgks5114/codingTest/baekjoon/input.txt").toString().trim().split("\n");
+const newInput = input.slice(1, input.length).map( (el) => el.split(" ").map( (element) => Number(element)));
+
+function solution(arr) {
+
+  let answer = [];
+  let newArr, visit, M, N, K, result;
+  let idx = 0;
+
+  const DFS = (x, y) => {
+
+    let dx = [0, 1, 0, -1];
+    let dy = [1, 0, -1, 0];
+
+    visit[x][y] = 1;
+
+    for (let i = 0; i < 4; i++) {
+
+      let ax = x + dx[i];
+      let ay = y + dy[i];
+
+      if (ax >= 0 && ay >= 0 && ax < M && ay < N) {
+        if (visit[ax][ay] === 0 && newArr[ax][ay] === 1) {
+          DFS(ax, ay);
+        }
+      }
+
+    }
+
+  };
+
+  for (let i = 0; i < Number(input[0]); i++) {
+
+    let temp = idx;
+
+    [M, N, K] = arr[idx];
+    newArr = Array.from(Array(M), () => new Array(N).fill(0));
+    visit = Array.from(Array(M), () => new Array(N).fill(0));
+    result = 0;
+
+    for (idx = idx + 1; idx <= K + temp; idx++) {
+
+      let [x, y] = arr[idx];
+
+      newArr[x][y] = 1;
+
+    }
+
+    for (let j = 0; j < M; j++) {
+      for (let k = 0; k < N; k++) {
+        if (newArr[j][k] === 1 && visit[j][k] === 0) {
+          DFS(j,k);
+          result++;
+        }
+      }
+    }
+
+    answer.push(result);
+  }
+
+  return answer.join("\n");
+}
+
+console.log(solution(newInput));
+
+// let [testCase, ...inputs] = require('fs').readFileSync("/home/ryurbsgks5114/codingTest/baekjoon/input.txt").toString().trim().split("\n");
+// let graph, visited, M, N ,K ,result, p = 0
+// for(let i = 0; i < inputs.length; i++) inputs[i] = inputs[i].split(" ").map((e)=>+e)
+
+
+// for(let i = 0; i < testCase; i++){
+//     [M, N, K] = inputs[p]
+//     graph = Array.from(Array(M), () => new Array(N).fill(0)), visited = Array.from(Array(M), () => new Array(N).fill(0))
+//     result = 0
+//     let temp = p
+//     for(p = p+1; p <= K + temp; p++){
+//         let [x, y] = inputs[p]
+//         graph[x][y] = 1
+//     }
+//     for(let j = 0; j < M; j++){
+//         for(let k = 0; k < N; k++){
+//             if(graph[j][k] == 1 && visited[j][k]==0){
+//                 DFS(j,k)
+//                 result ++
+//             }
+//         }
+//     }
+//     console.log(result)
+// }
+
+// function DFS(x,y){
+//     let dx=[0,1,0,-1], dy=[1,0,-1,0]
+//     visited[x][y] = 1
+//     for(let i = 0; i < 4; i++){
+//         let ax = x + dx[i], ay = y + dy[i]
+//         if(ax >= 0 && ay >= 0 && ax < M && ay < N){
+//             if(visited[ax][ay] == 0 && graph[ax][ay] == 1){
+//                 DFS(ax, ay)
+//             }
+//         }
+//     }
+// }
